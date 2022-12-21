@@ -82,6 +82,8 @@ const displayMovements = function (movements, sort = false) {
   });
 };
 
+/////////////////////////////////////////////////
+
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${acc.balance}€`;
@@ -109,6 +111,8 @@ const calcDisplaySummary = function (acc) {
   labelSumInterest.textContent = `${interest}€  `;
 };
 
+/////////////////////////////////////////////////
+
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -119,6 +123,8 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
+
+/////////////////////////////////////////////////
 
 const updateUI = function (acc) {
   displayMovements(acc.movements);
