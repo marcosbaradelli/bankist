@@ -1,10 +1,7 @@
 "use strict";
 
 /////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
 
-// Data
 const account1 = {
   owner: "Jonas Schmedtmann",
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -35,7 +32,8 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// Elements
+/////////////////////////////////////////////////
+
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
 const labelBalance = document.querySelector(".balance__value");
@@ -60,6 +58,8 @@ const inputTransferAmount = document.querySelector(".form__input--amount");
 const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
+
+/////////////////////////////////////////////////
 
 const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = "";
@@ -121,17 +121,12 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 
 const updateUI = function (acc) {
-  // Display movements
   displayMovements(acc.movements);
 
-  // Display balance
   calcDisplayBalance(acc);
 
-  // Display summary
   calcDisplaySummary(acc);
 };
-
-// Event handler
 
 let currentAccount;
 
@@ -143,14 +138,12 @@ btnLogin.addEventListener("click", function (e) {
   );
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(" ")[0]
     }`;
 
     containerApp.style.opacity = 100;
 
-    // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = "";
     inputLoginPin.blur();
 
@@ -221,8 +214,6 @@ btnSort.addEventListener("click", function (e) {
 });
 
 /////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
 
 const currencies = new Map([
   ["USD", "United States dollar"],
@@ -248,14 +239,14 @@ const movementsDescriptions = movements.map((mov, i) => {
   `;
 });
 
-const deposits = movements.filter(function (mov, i, arr) {
-  return mov > 0;
-});
+// const deposits = movements.filter(function (mov, i, arr) {
+//   return mov > 0;
+// });
 
 const depositsFor = [];
 for (const mov of movements) if (mov > 0) depositsFor.push(mov);
 
-const withdrawals = movements.filter((mov) => mov < 0);
+// const withdrawals = movements.filter((mov) => mov < 0);
 
 /////////////////////////////////////////////////
 
@@ -292,9 +283,6 @@ const deposit = (mov) => mov > 0;
 
 /////////////////////////////////////////////////
 
-const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
-const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
-
 const overalBalance = accounts
   .map((acc) => acc.movements)
   .flat()
@@ -310,3 +298,71 @@ const owners = ["Jonas", "Zach", "Adam", "Martha"];
 
 movements.sort((a, b) => a - b);
 movements.sort((a, b) => b - a);
+
+/////////////////////////////////////////////////
+
+const arr = [1, 2, 3, 4, 5, 6, 7];
+const x = new Array(7);
+
+x.fill(1, 3, 5);
+x.fill(1);
+
+arr.fill(23, 4, 6);
+
+const y = Array.from({ length: 7 }, () => 1);
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+
+labelBalance.addEventListener("click", function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll("movements__value"),
+    (el) => Number(el.textContent.replace("€", ""))
+  );
+
+  const movementsUI2 = [...document.querySelectorAll(".movements__value")];
+});
+
+/////////////////////////////////////////////////
+
+const bankDepositSum = accounts
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov > 0)
+  .reduce((sum, cur) => sum + cur, 0);
+console.log(bankDepositSum);
+
+/////////////////////////////////////////////////
+
+const numDeposits1000 = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((count, cur) => (cur >= 1000 ? count++ : count), 0);
+console.log(numDeposits1000);
+
+/////////////////////////////////////////////////
+
+const { deposits, withdrawals } = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      sums[cur > 0 ? "deposits" : "withdrawals"] += cur;
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+console.log(deposits, withdrawals);
+
+/////////////////////////////////////////////////
+
+const convertTitleCase = function (title) {
+  const capitzalize = (str) => str[0].toUpperCase() + str.slice(1);
+
+  const exceptions = ["a", "an", "and", "the", "but", "or", "in", "with"];
+
+  const titleCase = title
+    .toLowerCase()
+    .split(" ")
+    .map((word) => (exceptions.includes(word) ? word : capitzalize(word)))
+    .join(" ");
+  return capitzalize(titleCase);
+};
+console.log(convertTitleCase("this is a nice title"));
+console.log(convertTitleCase("this is a LONG title but n ot too long"));
+console.log(convertTitleCase("and here is another title with an EXAMPLE"));
